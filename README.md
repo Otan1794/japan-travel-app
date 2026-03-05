@@ -10,6 +10,7 @@ A FastAPI web application for managing and organizing travel destinations in Jap
 - Prefecture organization
 - RESTful API for CRUD operations
 - Interactive web interface
+- Static asset serving (CSS/JS/images) from `/static` path
 
 ## Prerequisites
 
@@ -57,22 +58,35 @@ Once the server is running, open your browser and navigate to:
 
 ## Project Structure
 
+Static files such as JavaScript, CSS, images and GeoJSON data are placed under the top‑level `static/` directory and served by FastAPI at the `/static` URL prefix. For example, `static/assets/js/map.js` is referenced in templates with `<script src="/static/assets/js/map.js"></script>`.
+
+
 ```
 japan-travel-app/
-├── app/
-│   ├── main.py              # FastAPI application entry point
-│   ├── config.py            # Configuration settings
-│   ├── database.py          # Database setup and connection
-│   ├── models.py            # SQLAlchemy database models
-│   ├── schemas.py           # Pydantic request/response schemas
-│   ├── crud.py              # Database CRUD operations
+├── app/                     # application package
+│   ├── main.py              # FastAPI entry point
+│   ├── config.py            # configuration settings
+│   ├── database.py          # DB setup & connection
+│   ├── models.py            # SQLAlchemy models
+│   ├── schemas.py           # Pydantic schemas
+│   ├── crud.py              # CRUD helpers
 │   └── routers/
 │       └── places.py        # API routes for places
-├── templates/               # HTML templates
-│   ├── index.html
-│   └── home.html
-├── requirements.txt         # Python dependencies
-└── README.md               # This file
+├── static/                  # served at /static
+│   ├── assets/
+│   │   ├── css/
+│   │   └── js/
+│   │       └── map.js
+│   └── japan.geojson        # geo data for map
+├── templates/               # Jinja2/HTML templates
+│   ├── assets/
+│   │   ├── css/
+│   │   └── js/
+│   │       └── map.js        # duplicate copy for development if any
+│   ├── home.html
+│   └── index.html
+├── uploads/                 # user-uploaded photos
+└── requirements.txt         # Python dependencies
 ```
 
 ## API Endpoints
@@ -116,6 +130,14 @@ uploads/
 
 ## Troubleshooting
 
+### Static File 404s
+If your browser logs show `GET /assets/js/map.js 404`, remember to reference static assets through the `/static` mount point:
+```html
+<script src="/static/assets/js/map.js"></script>
+```
+Refresh the page or clear the cache if changes are not reflected.
+
+
 ### Port Already in Use
 If port 8000 is already in use, specify a different port:
 ```bash
@@ -157,6 +179,9 @@ See [requirements.txt](requirements.txt) for a complete list of dependencies wit
 - **pydantic** - Data validation
 
 ## License
+
+(Replace this section with your chosen license, e.g. MIT or Apache 2.0.)
+
 
 [Add your license here]
 

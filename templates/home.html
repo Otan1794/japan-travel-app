@@ -3,76 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    <title>Japan Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
-    <style>
-    html, body {
-        height: 100%;
-        margin: 0;
-    }
+    <link rel="stylesheet" href="/static/css/style.css">
 
-    #map {
-        height: 100%;
-        width: 100%;
-    }
-    </style>
 </head>
 <body>
-    <div id="search"><input type="text"></div>
+    <div id="search"><input type="text" id="search-input" placeholder="Search for a location..."></div>
+    <div id="info-panel">Hover over a prefecture</div>
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <script>        
-
-        var map = L.map('map').setView([36.495299, 138.561512], 5);
-
-        L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-            maxZoom: 20,
-            attribution: '&copy; OpenStreetMap contributors &copy; Stadia Maps'
-        }).addTo(map);
-
-        fetch("/static/japan.geojson")
-        .then(response => response.json())
-        .then(data => {
-
-        function highlightFeature(e) {
-            e.target.setStyle({
-                weight: 3,
-                color: '#000',
-                fillColor: '#00bfff',
-                fillOpacity: 0.7
-            });
-        }
-
-        function resetHighlight(e) {
-            japanLayer.resetStyle(e.target);
-        }
-
-        function onEachFeature(feature, layer) {
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight,
-            });
-        }
-
-            // Add GeoJSON layer
-            var japanLayer = L.geoJSON(data, {
-                style: {
-                    color: "#333",
-                    weight: 1,
-                    fillColor: "#ff4d4d",
-                    fillOpacity: 0.5
-                },
-                onEachFeature: onEachFeature
-                
-            }).addTo(map);
-
-            // Fit map to Japan bounds
-            map.fitBounds(japanLayer.getBounds());
-            map.setMaxBounds(japanLayer.getBounds());
-        });
-    </script>
+    <script src="/static/js/map.js"></script>
 </body>
 </html>
